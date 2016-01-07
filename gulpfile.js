@@ -3,12 +3,10 @@
 var gulp = require('gulp');
 var browserSync = require('browser-sync').create();
 var gfi = require('gulp-file-insert');
-var notify = require('gulp-notify');
 
 gulp.task('scripts', function() {
     return gulp.src('src/scripts/**/*.js')
         .pipe(gulp.dest('build/assets/js'));
-        // .pipe(notify({message: 'Scripts task complete'}));
 });
 
 gulp.task('shaders', function() {
