@@ -4,6 +4,8 @@
     precision mediump float;
 #endif
 
+varying highp vec2 vTextureCoord;
+
 void main() {
     gl_FragColor = vec4(gl_FragCoord.x / 640.0,
                         gl_FragCoord.y / 480.0,

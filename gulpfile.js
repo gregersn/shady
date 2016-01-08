@@ -21,7 +21,10 @@ gulp.task('shaders', function() {
 gulp.task('serve', ['shaders', 'scripts'], function() {
     browserSync.init({
         server: {
-            baseDir: './build'
+            baseDir: './build',
+            routes: {
+                '/static': './static',
+            }
         }
     });
     gulp.watch('./src/shaders/*.glsl', ['shaders']);
