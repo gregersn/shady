@@ -20,10 +20,11 @@ gulp.task('shaders', function() {
 
 gulp.task('serve', ['shaders', 'scripts'], function() {
     browserSync.init({
+        startPath: '/index.html',
         server: {
             baseDir: './build',
             routes: {
-                '/static': './static',
+                '/static': 'static',
             }
         }
     });
@@ -31,6 +32,7 @@ gulp.task('serve', ['shaders', 'scripts'], function() {
     gulp.watch('./src/scripts/*.js', ['scripts']);
     gulp.watch('./src/html/*.html', ['shaders']);
     gulp.watch('build/*.html').on('change', browserSync.reload);
+    gulp.watch('build/assets/js/*.js').on('change', browserSync.reload);
 });
 
 
