@@ -38,10 +38,12 @@ function loadImage(url, callback) {
 }
 
 function init() {
-    var image = loadImage('http://localhost:3000/static/images/uvtest.png', init_gl);
+    //var image = loadImage('http://localhost:3000/static/images/uvtest.png', init_gl);
+    var textures = document.getElementById('textures').getElementsByTagName('img');
+    init_gl(textures);
 }
 
-function init_gl(image) {
+function init_gl(images) {
     console.log('Hei?');
     canvas = document.getElementById('glscreen');
     canvas.width = 640.0;
@@ -100,15 +102,35 @@ function init_gl(image) {
     gl.enableVertexAttribArray(textureCoordLocation);
     gl.vertexAttribPointer(textureCoordLocation, 2, gl.FLOAT, false, 0, 0);
 
-    var texture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, texture);
+    var texture = null;
+    var textures = [];
+    for(var textureid = 0; textureid < images.length; textureid++) {
+        texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, texture);
 
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[textureid]);
 
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        textures.push(texture);
+    }
+
+    var u_image0Location = gl.getUniformLocation(shaderprogram, 'u_image0');
+    var u_image1Location = gl.getUniformLocation(shaderprogram, 'u_image1');
+
+    gl.uniform1i(u_image0Location, 0);
+    gl.uniform1i(u_image1Location, 1);
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, textures[0]);
+
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+
+
+
     gl.drawArrays(gl.TRIANGLES, 0, 6);
 
     return; 

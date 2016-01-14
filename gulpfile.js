@@ -18,6 +18,8 @@ gulp.task('shaders', function() {
         .pipe(gulp.dest('./build/'));
 });
 
+gulp.task('shaders-watch', ['shaders'], browserSync.reload);
+
 gulp.task('serve', ['shaders', 'scripts'], function() {
     browserSync.init({
         startPath: '/index.html',
@@ -28,7 +30,7 @@ gulp.task('serve', ['shaders', 'scripts'], function() {
             }
         }
     });
-    gulp.watch('./src/shaders/*.glsl', ['shaders']);
+    gulp.watch('./src/shaders/*.glsl', ['shaders-watch']);
     gulp.watch('./src/scripts/*.js', ['scripts']);
     gulp.watch('./src/html/*.html', ['shaders']);
     gulp.watch('build/*.html').on('change', browserSync.reload);
